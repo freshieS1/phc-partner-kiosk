@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Planetary Guardians — Our Partners</title>
+<style>
+  :root{
+    --bg:#050607;
+    --card:#111414;
+    --card-border:#1f2626;
+    --accent:#2fb8ac;
+    --accent-dim:#1c6a63;
+    --text:#f5f7f6;
+    --text-dim:#9fb0ae;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{
+    margin:0; padding:0; width:100%; height:100%;
+    background:var(--bg); color:var(--text);
+    font-family:"Arial Narrow","Helvetica Neue Condensed","Roboto Condensed",Arial,Helvetica,sans-serif;
+    overflow:hidden;
+    -webkit-user-select:none; user-select:none;
+  }
+  #app{position:fixed; inset:0; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:28px 40px 18px;
+    border-bottom:1px solid var(--card-border);
+  }
+  .wordmark{
+    font-weight:800; letter-spacing:0.14em; text-transform:uppercase;
+    font-size:15px; color:var(--text-dim);
+  }
+  .wordmark b{color:var(--accent);}
+  .section-label{
+    font-weight:800; letter-spacing:0.1em; text-transform:uppercase;
+    font-size:13px; color:var(--accent);
+  }
+  .back-btn{
+    appearance:none; border:1px solid var(--card-border); background:transparent;
+    color:var(--text); font-weight:700; letter-spacing:0.03em;
+    padding:12px 22px; border-radius:999px; font-size:16px;
+    display:flex; align-items:center; gap:8px; cursor:pointer;
+    font-family:inherit;
+  }
+  .back-btn:active{background:var(--card-border);}
+
+  /* ---------- Grid / landing screen ---------- */
+  .grid-screen{padding:36px 40px 80px; max-width:1400px; margin:0 auto;}
+  .headline{
+    font-weight:800; text-transform:uppercase; letter-spacing:0.01em;
+    font-size:clamp(30px, 4.2vw, 54px); line-height:1.05; margin:18px 0 10px;
+    max-width:16ch;
+  }
+  .subhead{
+    font-size:clamp(16px, 1.6vw, 20px); color:var(--text-dim);
+    max-width:62ch; line-height:1.5; margin:0 0 40px; font-weight:400;
+    font-family:Arial,Helvetica,sans-serif;
+  }
+  .tile-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    gap:24px;
+  }
+  .tile{
+    background:var(--card); border:1px solid var(--card-border); border-radius:18px;
+    padding:26px 22px; cursor:pointer; text-align:left;
+    display:flex; flex-direction:column; align-items:flex-start; gap:16px;
+    min-height:210px; transition:border-color .15s, transform .15s;
+    font-family:inherit;
+  }
+  .tile:active{transform:scale(0.97); border-color:var(--accent);}
+  .avatar{
+    width:64px; height:64px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:22px; color:#04211e;
+    flex:none; overflow:hidden;
+  }
+  .avatar img{width:100%; height:100%; object-fit:cover;}
+  .tile-name{
+    font-weight:800; text-transform:uppercase; font-size:19px; letter-spacing:0.01em;
+    line-height:1.15;
+  }
+  .tile-tagline{
+    color:var(--text-dim); font-size:14.5px; line-height:1.45;
+    font-family:Arial,Helvetica,sans-serif; font-weight:400;
+  }
+  .tile.placeholder{border-style:dashed; opacity:0.55;}
+  .tile.placeholder .tile-tagline{font-style:italic;}
+
+  /* ---------- Detail screen ---------- */
+  .detail-screen{padding:0 0 80px; max-width:900px; margin:0 auto;}
+  .detail-hero{
+    display:flex; align-items:center; gap:22px;
+    padding:34px 40px 28px;
+  }
+  .detail-hero .avatar{width:88px; height:88px; font-size:30px;}
+  .detail-name{font-weight:800; text-transform:uppercase; font-size:clamp(24px,3.2vw,36px); line-height:1.1;}
+  .detail-tagline{color:var(--text-dim); font-size:16px; margin-top:6px; font-family:Arial,Helvetica,sans-serif;}
+  .detail-body{padding:0 40px;}
+  .section-card{
+    background:var(--card); border:1px solid var(--card-border); border-radius:16px;
+    padding:24px 26px; margin-bottom:18px;
+  }
+  .section-heading{
+    font-weight:800; text-transform:uppercase; letter-spacing:0.06em;
+    font-size:13px; color:var(--accent); margin-bottom:10px;
+  }
+  .section-body{
+    font-family:Arial,Helvetica,sans-serif; font-size:16.5px; line-height:1.6;
+    color:var(--text); font-weight:400; white-space:pre-line;
+  }
+  .footer-back{padding:8px 40px 0;}
+  .footer-back .back-btn{width:100%; justify-content:center; padding:16px;}
+
+  .testimonial-card{
+    background:var(--card); border:1px solid var(--card-border); border-left:4px solid var(--accent);
+    border-radius:12px; padding:22px 24px; margin-bottom:14px;
+  }
+  .testimonial-quote{
+    font-family:Arial,Helvetica,sans-serif; font-size:17px; line-height:1.55; font-style:italic;
+    color:var(--text);
+  }
+  .testimonial-quote::before{content:"\201C";}
+  .testimonial-quote::after{content:"\201D";}
+  .testimonial-attribution{
+    margin-top:12px; font-size:13px; letter-spacing:0.04em; text-transform:uppercase;
+    color:var(--text-dim); font-weight:700; font-style:normal;
+    font-family:Arial,Helvetica,sans-serif;
+  }
+  .testimonial-card.pending{border-left-color:var(--card-border); border-style:dashed; opacity:0.6;}
+
+  .qr-card{
+    display:flex; align-items:center; gap:20px;
+    background:var(--card); border:1px solid var(--card-border); border-radius:16px;
+    padding:22px 24px; margin-bottom:18px;
+  }
+  .qr-card.pending{border-style:dashed; opacity:0.6;}
+  .qr-box{
+    width:96px; height:96px; border-radius:8px; background:#fff; flex:none;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .qr-box img{width:100%; height:100%; object-fit:contain;}
+  .qr-box .qr-missing{color:#050607; font-size:11px; text-align:center; padding:6px; font-family:Arial,Helvetica,sans-serif;}
+  .qr-text{font-family:Arial,Helvetica,sans-serif; font-size:14.5px; color:var(--text-dim); line-height:1.5;}
+  .qr-label{font-weight:800; text-transform:uppercase; letter-spacing:0.06em; font-size:13px; color:var(--accent); margin-bottom:6px;}
+
+  .sources{
+    padding:4px 40px 0; margin-top:4px;
+    font-family:Arial,Helvetica,sans-serif; font-size:12.5px; color:var(--text-dim); line-height:1.7;
+  }
+  .sources .sources-label{
+    text-transform:uppercase; letter-spacing:0.06em; font-weight:800; color:var(--text-dim);
+    display:block; margin-bottom:6px; font-size:11.5px;
+  }
+  .sources a{color:var(--accent); text-decoration:none;}
+
+  .fade-in{animation:fadeIn .22s ease-out;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* =========================================================================
+   PARTNER DATA
+   ---------------------------------------------------------------------
+   One object per partner. This is the ONLY section that should need to
+   change as real content arrives — nothing below this block needs editing
+   to add, remove, or reorder partners.
+
+   Fields:
+     id       - unique slug, lowercase-hyphenated
+     name     - partner name, shown on tile + detail header
+     tagline  - one line, shown on both tile and detail header
+     logo     - optional. A data: URI (base64) or hosted image URL for a
+                square/round logo or photo. Leave "" to fall back to an
+                auto-generated initials avatar.
+     sections - array of { heading, body }. Body supports plain line breaks
+                (\n) but not HTML. Use as many or as few as the source
+                content supports — e.g. Mission / Impact / Get Involved,
+                or just one "About" section if that's all there is.
+     placeholder - set true only for not-yet-confirmed slots; gives the
+                tile a dashed, dimmed treatment so it reads as "coming
+                soon" rather than a finished (but empty) partner. Remove
+                this flag once real content is dropped in.
+     testimonials - optional array of { quote, attribution, pending }.
+                Rendered as distinct highlighted quote cards, separate
+                from the regular sections. Set pending:true (and leave
+                the quote as an obvious bracketed placeholder) for a
+                testimonial that hasn't been supplied yet — never fill
+                this in with an invented quote credited to a real person.
+     qr       - optional { image, caption, pending }. image is a data:
+                URI or hosted URL for the QR code itself; if empty (or
+                pending:true) a dashed placeholder box renders instead
+                of a fabricated/guessed code.
+     sources  - optional array of { label, url }. Renders as a small
+                citation list at the foot of the detail screen for any
+                factual claim pulled from outside research rather than
+                the partner's own supplied materials.
+   ========================================================================= */
+  const PARTNERS = [
+    {
+      id: "inpa",
+      name: "International Nature Prescribing Alliance (INPA)",
+      tagline: "Featuring Dr. Melissa Lem, Vancouver family physician and nature-prescribing pioneer.",
+      logo: "",
+      sections: [
+        {
+          heading: "Case Study: Dr. Melissa Lem",
+          body: "Dr. Melissa Lem is a Vancouver family physician who provides care in rural and northern Canadian communities. She's Director of PaRx — Canada's national nature prescription program, powered by the BC Parks Foundation — and President of the Canadian Association of Physicians for the Environment (CAPE), its first president of colour.\n\nShe's also a clinical assistant professor at the University of British Columbia and a co-investigator on two international nature-prescription research projects, PANDA and RESONATE, with combined funding of more than $10 million."
+        },
+        {
+          heading: "How She Prescribes Nature",
+          body: "Through PaRx, Dr. Lem and thousands of other Canadian healthcare providers write nature into a patient's care plan the same way they'd write any other prescription: a recommended dose of at least 2 hours a week outdoors, in sessions of 20 minutes or more. Patients can log their time and get matched with trained “Nature Connectors” who help them follow through."
+        },
+        {
+          heading: "Recognition",
+          body: "2026 Clean50 Award · 2024 Canadian Eco-Hero Award · 2024 YWCA Women of Distinction Award for Environmental Sustainability · 2022 Nature Inspiration Award, Canadian Museum of Nature"
+        }
+      ],
+      testimonials: [
+        {
+          pending: true,
+          quote: "[Real patient testimonial pending. Needs a genuine, consented quote from one of Dr. Lem's own patients — do not replace this with an invented or generic quote.]",
+          attribution: "Awaiting a real testimonial from Freshie / INPA"
+        }
+      ],
+      qr: {
+        image: "",
+        pending: true,
+        caption: "Same QR code as the INPA poster — pending the source file so it can be reproduced exactly rather than guessed."
+      },
+      sources: [
+        { label: "Dr. Melissa Lem — CAPE", url: "https://cape.ca/people/dr-melissa-lem/" },
+        { label: "PaRx: Park Prescriptions", url: "https://www.parkprescriptions.ca/" },
+        { label: "CAPE President Dr. Melissa Lem receives 2026 Clean50 Award", url: "https://cape.ca/press_release/cape-president-dr-melissa-lem-receives-2026-clean50-award/" }
+      ]
+    },
+    {
+      id: "partner-two",
+      name: "Partner Two",
+      tagline: "[One-line description of this partner's work goes here]",
+      logo: "",
+      placeholder: true,
+      sections: [
+        { heading: "Mission", body: "[Pull the partner's mission statement from their info — 2–4 sentences.]" },
+        { heading: "Impact", body: "[Key stats or outcomes — numbers land well here, e.g. reach, scale, results.]" },
+        { heading: "Get Involved", body: "[How an attendee can support or follow this partner's work, if provided.]" }
+      ]
+    },
+    {
+      id: "partner-three",
+      name: "Partner Three",
+      tagline: "Content coming soon",
+      logo: "",
+      placeholder: true,
+      sections: [
+        { heading: "About", body: "[Awaiting confirmation / content for this partner.]" }
+      ]
+    },
+    {
+      id: "partner-four",
+      name: "Partner Four",
+      tagline: "Content coming soon",
+      logo: "",
+      placeholder: true,
+      sections: [
+        { heading: "About", body: "[Awaiting confirmation / content for this partner.]" }
+      ]
+    },
+    {
+      id: "partner-five",
+      name: "Partner Five",
+      tagline: "Content coming soon",
+      logo: "",
+      placeholder: true,
+      sections: [
+        { heading: "About", body: "[Awaiting confirmation / content for this partner.]" }
+      ]
+    }
+  ];
+
+/* =========================================================================
+   RENDERING — no partner-specific logic below this line
+   ========================================================================= */
+  const app = document.getElementById("app");
+  const AVATAR_COLORS = ["#2fb8ac", "#3fd6c8", "#1c6a63", "#4fe0d1", "#25938a"];
+  let idleTimer = null;
+  const IDLE_MS = 30000;
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, c => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    }[c]));
+  }
+
+  function initials(name){
+    return name.trim().split(/\s+/).map(w => w[0]).slice(0,2).join("").toUpperCase();
+  }
+
+  function colorFor(name){
+    let hash = 0;
+    for (let i=0; i<name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+  }
+
+  function avatarHtml(partner, sizeClass){
+    if (partner.logo) {
+      return `<div class="avatar ${sizeClass||''}"><img src="${escapeHtml(partner.logo)}" alt=""></div>`;
+    }
+    const bg = colorFor(partner.name);
+    return `<div class="avatar ${sizeClass||''}" style="background:${bg}">${escapeHtml(initials(partner.name))}</div>`;
+  }
+
+  function renderGrid(){
+    clearIdleTimer();
+    const tiles = PARTNERS.map(p => `
+      <button class="tile ${p.placeholder ? 'placeholder' : ''}" data-id="${p.id}">
+        ${avatarHtml(p)}
+        <div class="tile-name">${escapeHtml(p.name)}</div>
+        <div class="tile-tagline">${escapeHtml(p.tagline)}</div>
+      </button>
+    `).join("");
+
+    app.innerHTML = `
+      <div class="topbar">
+        <div class="wordmark">Planetary <b>Guardians</b></div>
+        <div class="section-label">Our Partners</div>
+      </div>
+      <div class="grid-screen fade-in">
+        <div class="headline">Meet some of the partners doing incredible work to improve planetary and human health</div>
+        <div class="subhead">Tap a partner below to learn more about their work.</div>
+        <div class="tile-grid">${tiles}</div>
+      </div>
+    `;
+
+    app.querySelectorAll(".tile").forEach(btn => {
+      btn.addEventListener("click", () => showDetail(btn.dataset.id));
+    });
+  }
+
+  function renderDetail(partner){
+    const sections = partner.sections.map(s => `
+      <div class="section-card">
+        <div class="section-heading">${escapeHtml(s.heading)}</div>
+        <div class="section-body">${escapeHtml(s.body)}</div>
+      </div>
+    `).join("");
+
+    const testimonials = (partner.testimonials || []).map(t => `
+      <div class="testimonial-card ${t.pending ? 'pending' : ''}">
+        <div class="testimonial-quote">${escapeHtml(t.quote)}</div>
+        <div class="testimonial-attribution">${escapeHtml(t.attribution || '')}</div>
+      </div>
+    `).join("");
+    const testimonialsBlock = testimonials ? `
+      <div class="section-heading" style="padding:0 0 4px;">Patient Testimonials</div>
+      ${testimonials}
+    ` : "";
+
+    let qrBlock = "";
+    if (partner.qr) {
+      const q = partner.qr;
+      const qrInner = (q.image && !q.pending)
+        ? `<img src="${escapeHtml(q.image)}" alt="QR code">`
+        : `<div class="qr-missing">QR<br>pending</div>`;
+      qrBlock = `
+        <div class="qr-card ${q.pending ? 'pending' : ''}">
+          <div class="qr-box">${qrInner}</div>
+          <div class="qr-text"><div class="qr-label">Learn more</div>${escapeHtml(q.caption || '')}</div>
+        </div>
+      `;
+    }
+
+    let sourcesBlock = "";
+    if (partner.sources && partner.sources.length) {
+      const links = partner.sources.map(s =>
+        `<div>${escapeHtml(s.label)}${s.url ? ` — <a href="${escapeHtml(s.url)}">${escapeHtml(s.url)}</a>` : ''}</div>`
+      ).join("");
+      sourcesBlock = `<div class="sources"><span class="sources-label">Sources</span>${links}</div>`;
+    }
+
+    app.innerHTML = `
+      <div class="topbar">
+        <button class="back-btn" id="back-top">‹ Back to partners</button>
+        <div class="section-label">Our Partners</div>
+      </div>
+      <div class="detail-screen fade-in">
+        <div class="detail-hero">
+          ${avatarHtml(partner, "")}
+          <div>
+            <div class="detail-name">${escapeHtml(partner.name)}</div>
+            <div class="detail-tagline">${escapeHtml(partner.tagline)}</div>
+          </div>
+        </div>
+        <div class="detail-body">
+          ${sections}
+          ${qrBlock}
+          ${testimonialsBlock}
+        </div>
+        ${sourcesBlock}
+        <div class="footer-back">
+          <button class="back-btn" id="back-bottom">‹ Back to all partners</button>
+        </div>
+      </div>
+    `;
+
+    app.querySelector("#back-top").addEventListener("click", renderGrid);
+    app.querySelector("#back-bottom").addEventListener("click", renderGrid);
+
+    app.scrollTop = 0;
+    resetIdleTimer();
+  }
+
+  function showDetail(id){
+    const partner = PARTNERS.find(p => p.id === id);
+    if (!partner) return;
+    renderDetail(partner);
+  }
+
+  function resetIdleTimer(){
+    clearIdleTimer();
+    idleTimer = setTimeout(renderGrid, IDLE_MS);
+  }
+  function clearIdleTimer(){
+    if (idleTimer) clearTimeout(idleTimer);
+    idleTimer = null;
+  }
+
+  // Any interaction while on a detail screen resets the idle clock;
+  // no-op while on the grid (clearIdleTimer keeps it off there).
+  ["click","touchstart","keydown"].forEach(evt => {
+    document.addEventListener(evt, () => { if (idleTimer) resetIdleTimer(); }, {passive:true});
+  });
+
+  renderGrid();
+</script>
+</body>
+</html>
