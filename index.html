@@ -334,7 +334,11 @@
         },
         {
           heading: "What the Alliance Does",
-          body: "The Planetary Health Alliance champions the movement globally by building leadership networks and convening communities of practice that drive concrete strategies for tackling ecological and health challenges at every level — across education, policy, and movement building.\n\nIt works alongside the Johns Hopkins Institute for Planetary Health, which connects research, policy, education, clinical practice, and the arts at the world's leading university in global health, to translate evidence into action at scale."
+          body: "The Planetary Health Alliance champions the movement globally by building leadership networks and convening communities of practice that drive concrete strategies for tackling ecological and health challenges at every level.\n\nIts work spans three fronts. Education: embedding Planetary Health in curriculums across disciplines and ages to increase awareness, drive scholarship, and inspire future practitioners. Policy: applying a Planetary Health lens to shape policy at every level of government in support of a just transition. Movement building: mobilizing a global community and building the collective will for transformational change.\n\nIt works alongside the Johns Hopkins Institute for Planetary Health, which connects research, policy, education, clinical practice, and the arts at the world's leading university in global health, to translate evidence into action at scale."
+        },
+        {
+          heading: "The Opportunity",
+          body: "The window for meaningful action is narrowing — but the opportunity to shape what comes next remains in our hands. That work depends on more people getting involved: researchers, policymakers, healthcare providers, and everyday advocates, each finding where they fit into the movement.\n\nThe Alliance's Regional Hubs are where that happens on the ground — locally rooted, independently led communities of practice advancing Planetary Health within their own contexts around the world."
         }
       ],
       stats: {
@@ -348,8 +352,9 @@
       },
       qr: {
         image: PHA_REGIONAL_HUBS_QR,
-        caption: "Explore the Alliance's 9 Regional Hubs around the world."
-      }
+        caption: "Scan to explore the Planetary Health Regional Hubs — locally rooted, independently led communities of practice advancing Planetary Health within their own contexts around the world."
+      },
+      website: "planetaryhealthalliance.org"
     },
     {
       id: "partner-three",
@@ -389,7 +394,7 @@
   const app = document.getElementById("app");
   const AVATAR_COLORS = ["#2fb8ac", "#3fd6c8", "#1c6a63", "#4fe0d1", "#25938a"];
   let idleTimer = null;
-  const IDLE_MS = 30000;
+  const IDLE_MS = 120000;
 
   function escapeHtml(str){
     return String(str).replace(/[&<>"']/g, c => ({
@@ -575,6 +580,14 @@
       sourcesBlock = `<div class="sources"><span class="sources-label">Sources</span>${links}</div>`;
     }
 
+    let websiteBlock = "";
+    if (partner.website) {
+      // Plain text, not a live link — the kiosk stays leak-proof (no outbound
+      // navigation from its own locked-down browser); a real visit happens via
+      // the partner's QR code on the visitor's own phone instead.
+      websiteBlock = `<div class="sources"><span class="sources-label">Website</span><div>${escapeHtml(partner.website)}</div></div>`;
+    }
+
     app.innerHTML = `
       <div class="topbar">
         <button class="back-btn" id="back-top">‹ Back to partners</button>
@@ -599,6 +612,7 @@
           ${testimonialsBlock}
         </div>
         ${sourcesBlock}
+        ${websiteBlock}
         <div class="footer-back">
           <button class="back-btn" id="back-bottom">‹ Back to all partners</button>
         </div>
