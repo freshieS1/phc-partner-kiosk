@@ -170,7 +170,7 @@
      full-bleed width instead of turning into an ultra-thin sliver on a wide
      screen; object-position is set per-instance via an inline style so the
      crop can be centered on whatever's actually interesting in that photo. */
-  .photo-divider{position:relative; aspect-ratio:2.2/1; max-height:420px; min-height:220px; overflow:hidden; margin:8px 0 48px;}
+  .photo-divider{position:relative; aspect-ratio:2.2/1; max-height:420px; min-height:220px; overflow:hidden; margin-top:8px; margin-bottom:48px;}
   .photo-divider img{width:100%; height:100%; object-fit:cover; object-position:center; display:block;}
   .photo-divider .divider-scrim{
     position:absolute; inset:0;
@@ -178,7 +178,7 @@
   }
 
   /* Full-bleed, photo-backed stat band (shared kiosk chrome). */
-  .stat-band{position:relative; padding:60px 40px; margin:8px 0 48px; overflow:hidden;}
+  .stat-band{position:relative; padding:60px 40px; margin-top:8px; margin-bottom:48px; overflow:hidden;}
   .stat-band .stat-band-bg{position:absolute; inset:0; z-index:0;}
   .stat-band .stat-band-bg img{width:100%; height:100%; object-fit:cover; display:block;}
   .stat-band .stat-band-scrim{
@@ -209,6 +209,44 @@
   .section-body{
     font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; font-size:17px; line-height:1.65;
     color:var(--text); font-weight:400; white-space:pre-line;
+  }
+
+  /* Text-next-to-image section layout — an alternative to the plain centered
+     text column, for editorial variety. A section opts in via `media`. */
+  .section-split{
+    display:flex; align-items:center; gap:44px; max-width:920px;
+  }
+  .section-split.split-left{flex-direction:row-reverse;}
+  .split-media{
+    flex:none; width:min(340px, 38%); aspect-ratio:4/5; border-radius:14px;
+    overflow:hidden; background:#0b0f0f;
+  }
+  .split-media img{width:100%; height:100%; object-fit:cover; display:block;}
+  .split-text{flex:1; min-width:0;}
+  .split-text .section-heading{margin-bottom:16px;}
+  @media (max-width:720px){
+    .section-split{flex-direction:column !important; gap:24px;}
+    .split-media{width:100%; aspect-ratio:16/10;}
+  }
+
+  /* Recognition / awards — one small standalone card per item instead of a
+     single line of text, so each award reads on its own rather than
+     disappearing into a run-on sentence. */
+  .recognition-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));
+    gap:14px; margin-top:22px;
+  }
+  .recognition-card{
+    background:var(--card); border:1px solid var(--card-border); border-radius:12px;
+    padding:18px 20px;
+  }
+  .recognition-year{
+    font-weight:800; text-transform:uppercase; letter-spacing:0.06em;
+    font-size:12.5px; color:var(--accent); margin-bottom:8px;
+  }
+  .recognition-title{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    font-size:15px; line-height:1.4; color:var(--text);
   }
 
   .pillar-list{display:flex; flex-direction:column; gap:28px; margin-top:26px;}
@@ -377,23 +415,31 @@
       name: "International Nature Prescribing Alliance (INPA)",
       tagline: "Featuring Dr. Melissa Lem, Vancouver family physician and nature-prescribing pioneer.",
       logo: DR_LEM_PHOTO,
-      heroImage: DR_LEM_PHOTO,
+      heroImage: DR_LEM_FOREST_PHOTO,
+      heroImageFit: "cover",
       tileImage: DR_LEM_FOREST_PHOTO,
       tileImageFit: "cover",
       hideTileBadge: true,
       sections: [
         {
           heading: "Case Study: Dr. Melissa Lem",
-          body: "Dr. Melissa Lem is a Vancouver family physician who provides care in rural and northern Canadian communities. She's Director of PaRx — Canada's national nature prescription program, powered by the BC Parks Foundation — and President of the Canadian Association of Physicians for the Environment (CAPE), its first president of colour.\n\nShe's also a clinical assistant professor at the University of British Columbia and a co-investigator on two international nature-prescription research projects, PANDA and RESONATE, with combined funding of more than $10 million."
+          body: "Dr. Melissa Lem is a Vancouver family physician who provides care in rural and northern Canadian communities. She's Director of PaRx — Canada's national nature prescription program, powered by the BC Parks Foundation — and President of the Canadian Association of Physicians for the Environment (CAPE), its first president of colour.\n\nShe's also a clinical assistant professor at the University of British Columbia and a co-investigator on two international nature-prescription research projects, PANDA and RESONATE, with combined funding of more than $10 million.",
+          media: { image: DR_LEM_PHOTO, position: "right" }
         },
         {
           heading: "How She Prescribes Nature",
           body: "Through PaRx, Dr. Lem and thousands of other Canadian healthcare providers write nature into a patient's care plan the same way they'd write any other prescription: a recommended dose of at least 2 hours a week outdoors, in sessions of 20 minutes or more. Patients can log their time and get matched with trained “Nature Connectors” who help them follow through.",
-          divider: TEXTURE_PARK_LIGHT
+          divider: TEXTURE_PARK_LIGHT,
+          dividerPosition: "50% 40%"
         },
         {
           heading: "Recognition",
-          body: "2026 Clean50 Award · 2024 Canadian Eco-Hero Award · 2024 YWCA Women of Distinction Award for Environmental Sustainability · 2022 Nature Inspiration Award, Canadian Museum of Nature"
+          awards: [
+            { year: "2026", title: "Clean50 Award" },
+            { year: "2024", title: "Canadian Eco-Hero Award" },
+            { year: "2024", title: "YWCA Women of Distinction Award for Environmental Sustainability" },
+            { year: "2022", title: "Nature Inspiration Award, Canadian Museum of Nature" }
+          ]
         }
       ],
       testimonials: [
@@ -404,28 +450,25 @@
         }
       ],
       qr: {
-        image: "",
-        pending: true,
-        caption: "Same QR code as the INPA poster — pending the source file so it can be reproduced exactly rather than guessed."
-      },
-      sources: [
-        { label: "Dr. Melissa Lem — CAPE", url: "https://cape.ca/people/dr-melissa-lem/" },
-        { label: "PaRx: Park Prescriptions", url: "https://www.parkprescriptions.ca/" },
-        { label: "CAPE President Dr. Melissa Lem receives 2026 Clean50 Award", url: "https://cape.ca/press_release/cape-president-dr-melissa-lem-receives-2026-clean50-award/" }
-      ]
+        image: DR_LEM_QR_CODE,
+        caption: "Connecting the World Through Better Health Through Nature. Learn about the global organization that's working to scale up the practice of nature prescribing worldwide."
+      }
     },
     {
       id: "pha",
       name: "Planetary Health Alliance",
       tagline: "A global movement connecting human health to the health of Earth's natural systems.",
       logo: PHA_ICON_MARK,
-      heroImage: PHA_HERO_PHOTO,
+      heroImage: PHA_TILE_PHOTO,
+      heroImageFit: "cover",
       tileImage: PHA_TILE_PHOTO,
       tileImageFit: "cover",
+      hideTileBadge: true,
       sections: [
         {
           heading: "What Planetary Health Is",
-          body: "Planetary Health is a solutions-oriented, transdisciplinary field and social movement focused on understanding and addressing how human disruptions to Earth's natural systems affect human health and all life on Earth. From the air we breathe to the water we drink and the food we eat, human health depends on the health of the planet's natural systems."
+          body: "Planetary Health is a solutions-oriented, transdisciplinary field and social movement focused on understanding and addressing how human disruptions to Earth's natural systems affect human health and all life on Earth. From the air we breathe to the water we drink and the food we eat, human health depends on the health of the planet's natural systems.",
+          media: { image: PHA_HERO_PHOTO, position: "left" }
         },
         {
           heading: "What the Alliance Does",
@@ -435,11 +478,13 @@
             { n: "02", title: "Policy", body: "Applying a Planetary Health lens to shape policy at every level of government in support of a just transition." },
             { n: "03", title: "Movement Building", body: "Mobilizing a global community and building the collective will for transformational change." }
           ],
-          divider: TEXTURE_COASTLINE
+          divider: TEXTURE_COASTLINE,
+          dividerPosition: "50% 60%"
         },
         {
           heading: "The Opportunity",
-          body: "The window for meaningful action is narrowing — but the opportunity to shape what comes next remains in our hands. That work depends on more people getting involved: researchers, policymakers, healthcare providers, and everyday advocates, each finding where they fit into the movement.\n\nThe Alliance's Regional Hubs are where that happens on the ground — locally rooted, independently led communities of practice advancing Planetary Health within their own contexts around the world.\n\nIt works alongside the Johns Hopkins Institute for Planetary Health, which connects research, policy, education, clinical practice, and the arts at the world's leading university in global health, to translate evidence into action at scale."
+          body: "The window for meaningful action is narrowing — but the opportunity to shape what comes next remains in our hands. That work depends on more people getting involved: researchers, policymakers, healthcare providers, and everyday advocates, each finding where they fit into the movement.\n\nThe Alliance's Regional Hubs are where that happens on the ground — locally rooted, independently led communities of practice advancing Planetary Health within their own contexts around the world.\n\nIt works alongside the Johns Hopkins Institute for Planetary Health, which connects research, policy, education, clinical practice, and the arts at the world's leading university in global health, to translate evidence into action at scale.",
+          media: { image: TEXTURE_FOREST_HERO, position: "right" }
         }
       ],
       stats: {
@@ -602,9 +647,11 @@
   }
 
   // Detail-screen hero banner — always the partner's own real photo (or the
-  // generated scene fallback) via partner.heroImage.
+  // generated scene fallback) via partner.heroImage. heroImageFit:'cover'
+  // works the same way as tileImageFit — fills the (now full-bleed) hero
+  // band edge-to-edge instead of the default contain+blurred-backdrop.
   function heroVisualHtml(partner){
-    return visualHtml(partner, partner.heroImage);
+    return visualHtml(partner, partner.heroImage, partner.heroImageFit);
   }
 
   // Grid-tile visual — defaults to the same image as the detail hero, but a
@@ -673,20 +720,46 @@
           `).join("")}
         </div>
       ` : "";
+      // Awards/recognition — a standalone card per item instead of one run-on
+      // line, so each credential reads on its own.
+      const awards = (s.awards && s.awards.length) ? `
+        <div class="recognition-grid">
+          ${s.awards.map(a => `
+            <div class="recognition-card">
+              <div class="recognition-year">${escapeHtml(a.year)}</div>
+              <div class="recognition-title">${escapeHtml(a.title)}</div>
+            </div>
+          `).join("")}
+        </div>
+      ` : "";
+      // A photo band directly after this section — shared decorative kiosk
+      // chrome (see TEXTURE_* comment above PARTNERS), sized by aspect ratio
+      // rather than a fixed px height, with a per-instance object-position so
+      // the crop centers on whatever's actually interesting in that photo.
       const divider = s.divider ? `
         <div class="photo-divider full-bleed">
-          <img src="${escapeHtml(s.divider)}" alt="">
+          <img src="${escapeHtml(s.divider)}" alt="" style="object-position:${escapeHtml(s.dividerPosition || 'center')}">
           <div class="divider-scrim"></div>
         </div>
       ` : "";
-      return `
-        <div class="section-card">
-          <div class="section-heading">${escapeHtml(s.heading)}</div>
-          <div class="section-body">${escapeHtml(s.body)}</div>
-          ${pillars}
+      const heading = `<div class="section-heading">${escapeHtml(s.heading)}</div>`;
+      const body = s.body ? `<div class="section-body">${escapeHtml(s.body)}</div>` : "";
+
+      // A section with `media` breaks out of the plain centered text column
+      // into a text-next-to-image layout for editorial variety, instead of
+      // every section reading as the same central chunk of text.
+      const card = s.media ? `
+        <div class="section-card section-split ${s.media.position === 'left' ? 'split-left' : ''}">
+          <div class="split-media"><img src="${escapeHtml(s.media.image)}" alt=""></div>
+          <div class="split-text">${heading}${body}${pillars}${awards}</div>
         </div>
-        ${divider}
+      ` : `
+        <div class="section-card">
+          ${heading}${body}${pillars}${awards}
+        </div>
       `;
+
+      return `${card}${divider}`;
     }).join("");
 
     let statsBlock = "";
@@ -756,7 +829,7 @@
         <div class="section-label">Our Partners</div>
       </div>
       <div class="detail-screen fade-in">
-        <div class="detail-hero-visual">
+        <div class="detail-hero-visual full-bleed">
           ${heroVisualHtml(partner)}
           <div class="detail-hero-scrim"></div>
           <div class="detail-hero">
